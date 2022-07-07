@@ -16,8 +16,8 @@ from sklearn.svm import SVC
 
 st.set_page_config(
     page_title="The Notebook",
-    # page_icon="pics/icon.png",
-    layout="wide",
+    page_icon="images/icon.png",
+    # layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': None,
@@ -32,6 +32,9 @@ hide_menu_style = """
         </style>
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
+
+st.sidebar.image('images/logo.png')
+st.image('images/header.png')
 
 with st.form("my_form"):
     social_status = st.selectbox(
@@ -141,6 +144,8 @@ with st.form("my_form"):
 
         if countt >= 3:
             st.write('Odds would be in you favor, you might survive')
+            st.balloons()
         else:
             st.write(
                 "You're lucky you didn't board the ship that day! Odds might not have been in your favor")
+            st.snow()

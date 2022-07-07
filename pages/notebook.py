@@ -16,7 +16,7 @@ from sklearn.svm import SVC
 
 st.set_page_config(
     page_title="The Notebook",
-    # page_icon="pics/icon.png",
+    page_icon="images/icon.png",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -33,7 +33,8 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-
+st.sidebar.image('images/logo.png')
+st.image('images/header.png')
 st.header("Importing and Inspecting the Data")
 
 
