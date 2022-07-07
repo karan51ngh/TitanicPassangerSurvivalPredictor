@@ -27,7 +27,7 @@ st.set_page_config(
 )
 hide_menu_style = """
         <style>
-        # MainMenu {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         </style>
         """
@@ -37,7 +37,8 @@ with st.form("my_form"):
     social_status = st.selectbox(
         "What's your Social Status",
         ('Working Class: Manual Labor', 'Middle Class: Moderately decent living standard', 'Upper Class: The Top 1%'))
-    Agee = st.number_input('Insert Age')
+    Agee = st.slider(
+        'How old are you?', 1, 90, 30)
     Sibb = st.number_input('Number of Siblings/Spouces')
     Parchh = st.number_input('Number of parents/children')
     faree = st.slider(
@@ -45,6 +46,9 @@ with st.form("my_form"):
     sexx = st.selectbox(
         "What's your sex?",
         ('Male', 'Female'))
+    embarkk = st.selectbox(
+        "Which town would you like to embark from?",
+        ('Cherbourg', 'Queenstown', 'Southampton'))
 
     submitted = st.form_submit_button("Predict!")
     if submitted:
@@ -71,13 +75,27 @@ with st.form("my_form"):
         xtrain = xtrain.to_numpy()
         xtest = xtest.to_numpy()
         logreg = LogisticRegression()
+        svc_classifier = SVC()
+        dt_classifier = DecisionTreeClassifier()
+        knn_classifier = KNeighborsClassifier(5)
         rf_classifier = RandomForestClassifier(
             n_estimators=1000, criterion='entropy', random_state=42)
         logreg.fit(xtrain, ytrain)
+        svc_classifier.fit(xtrain, ytrain)
+        dt_classifier.fit(xtrain, ytrain)
+        knn_classifier.fit(xtrain, ytrain)
         rf_classifier.fit(xtrain, ytrain)
+
         logreg_ypred = logreg.predict(xtest)
+        svc_classifier_ypred = svc_classifier.predict(xtest)
+        dt_classifier_ypred = dt_classifier.predict(xtest)
+        knn_classifier_ypred = knn_classifier.predict(xtest)
         rf_classifier_ypred = rf_classifier.predict(xtest)
+
         logreg_acc = accuracy_score(ytest, logreg_ypred)
+        svc_classifier_acc = accuracy_score(ytest, svc_classifier_ypred)
+        dt_classifier_acc = accuracy_score(ytest, dt_classifier_ypred)
+        knn_classifier_acc = accuracy_score(ytest, knn_classifier_ypred)
         rf_classifier_acc = accuracy_score(ytest, rf_classifier_ypred)
         # st.write(logreg_acc)
         # st.write(rf_classifier_acc)
@@ -97,12 +115,32 @@ with st.form("my_form"):
         elif sexx == 'Female':
             sexx = 0
 
-        yy = np.array([social_status, Agee, Sibb, Parchh, faree, sexx, 0, 1])
+        tempQ = 0
+        tempS = 0
+        if embarkk == 'Cherbourg':
+            pass
+        elif embarkk == 'Queenstown':
+            tempQ = 1
+        elif embarkk == 'Southampton':
+            tempS = 1
 
-        temp = logreg.predict([yy])
+        yy = np.array([social_status, Agee, Sibb,
+                      Parchh, faree, sexx, tempQ, tempS])
 
-        if temp == 1:
+        tempLR = logreg.predict([yy])
+        tempSV = svc_classifier.predict([yy])
+        tempDT = dt_classifier.predict([yy])
+        tempKN = knn_classifier.predict([yy])
+        tempRF = rf_classifier.predict([yy])
+
+        solarr = [tempLR, tempSV, tempDT, tempSV, tempKN, tempRF]
+        countt = 0
+        for i in solarr:
+            if i == 1:
+                countt += 1
+
+        if countt >= 3:
             st.write('Odds would be in you favor, you might survive')
-        if temp == 0:
+        else:
             st.write(
                 "You're lucky you didn't board the ship that day! Odds might not have been in your favor")

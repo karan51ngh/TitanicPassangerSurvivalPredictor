@@ -17,7 +17,7 @@ from sklearn.svm import SVC
 st.set_page_config(
     page_title="The Notebook",
     # page_icon="pics/icon.png",
-    # layout="wide",
+    layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': None,
@@ -27,7 +27,7 @@ st.set_page_config(
 )
 hide_menu_style = """
         <style>
-        # MainMenu {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         </style>
         """
@@ -279,8 +279,3 @@ st.table(tab)
 # st.write(type(xtest[0]))
 
 # st.dataframe(temp)
-yy = np.array([1, 10, 1, 0, 30, 0, 0, 1])
-
-temp = logreg.predict([yy])
-
-st.write(temp)
