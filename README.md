@@ -1,4 +1,6 @@
-# Titanic Passanger Survival Predictor
+# Titanic Passanger Survival Predictor  
+
+[hosted on streamlit](https://karan51ngh-titanicpassangersurvivalpr-survival-predictor-hd1q3s.streamlitapp.com/)
 
 The sinking of the RMS Titanic is one of the most infamous shipwrecks in history. On April 15, 1912, during her maiden voyage, the Titanic sank after colliding with an iceberg, killing 1502 out of 2224 passengers and crew. This sensational tragedy shocked the international community and led to better safety regulations for ships.
 
@@ -13,4 +15,8 @@ using the available data from [kaggle](https://www.kaggle.com/c/titanic/data), w
 - K-NN Classifier 
 - Random Forest Classifier
 
-Using these trained
+Using these trained models, we can predict whether a person would've survived the wreck based on:  
+- Age
+- Social Status
+- Gender
+- Port of Embarkment
