@@ -90,8 +90,8 @@ with col1:
     st.pyplot(fig)
 
 with col2:
-    for i in range(15):
-        st.write("")
+    # for i in range(15):
+    #     st.write("")
     st.write(
         '''
         Conclusion :
@@ -112,8 +112,8 @@ with col1:
 
 
 with col2:
-    for i in range(15):
-        st.write("")
+    # for i in range(15):
+    #     st.write("")
     st.write(
         '''
 
@@ -132,8 +132,8 @@ with col1:
     st.pyplot(age_visual)
 
 with col2:
-    for i in range(7):
-        st.write("")
+    # for i in range(7):
+    #     st.write("")
     st.write(
         '''
 	Age distribution seems to be a tailed distribution, maybe a gaussian distribution.
@@ -174,10 +174,10 @@ with col1:
     st.pyplot(pclass)
 
 with col2:
-    for i in range(15):
-        st.write("")
+    # for i in range(15):
+    #     st.write("")
     st.write('''
-    It is clearly obvious that Lower Class members have less chance to survive than the higher class. 
+    It is clearly obvious that Lower Class members have less chance to survive than the higher class.
     So Pclass, might play an important role in the prediction of the survival.
           ''')
 
@@ -217,9 +217,12 @@ y = df['Survived']
 xtrain, xtest, ytrain, ytest = train_test_split(
     x, y, test_size=0.30, random_state=0)
 
-sc_x = StandardScaler()
-xtrain = sc_x.fit_transform(xtrain)
-xtest = sc_x.transform(xtest)
+# sc_x = StandardScaler()
+# xtrain = sc_x.fit_transform(xtrain)
+# xtest = sc_x.transform(xtest)
+
+xtrain = xtrain.to_numpy()
+xtest = xtest.to_numpy()
 
 # classification
 
@@ -250,8 +253,34 @@ dt_classifier_acc = accuracy_score(ytest, dt_classifier_ypred)
 knn_classifier_acc = accuracy_score(ytest, knn_classifier_ypred)
 rf_classifier_acc = accuracy_score(ytest, rf_classifier_ypred)
 
-st.write("Logistic Regression : ", round(logreg_acc*100, 2))
-st.write("Support Vector      : ", round(svc_classifier_acc*100, 2))
-st.write("Decision Tree       : ", round(dt_classifier_acc*100, 2))
-st.write("K-NN Classifier     : ", round(knn_classifier_acc*100, 2))
-st.write("Random Forest       : ", round(rf_classifier_acc*100, 2))
+LR = round(logreg_acc*100, 2)
+SVM = round(svc_classifier_acc*100, 2)
+DT = round(dt_classifier_acc*100, 2)
+KNN = round(knn_classifier_acc*100, 2)
+RFC = round(rf_classifier_acc*100, 2)
+
+dfm = {
+    'Model Name': ['Logistic Regression', 'Support Vector Machine', 'Decision Tree', 'K-NN Classifier', 'Random Forest Classifier'],
+    'Accuracy Score': [LR, SVM, DT, KNN, RFC]
+}
+
+tab = pd.DataFrame.from_dict(dfm)
+st.table(tab)
+# st.write("Logistic Regression : ", round(logreg_acc*100, 2))
+# st.write("Support Vector      : ", round(svc_classifier_acc*100, 2))
+# st.write("Decision Tree       : ", round(dt_classifier_acc*100, 2))
+# st.write("K-NN Classifier     : ", round(knn_classifier_acc*100, 2))
+# st.write("Random Forest       : ", round(rf_classifier_acc*100, 2))
+
+# temp = logreg.predict([xtest[0]])
+# st.write(xtest[0])
+# st.write(temp)
+# st.write(type(xtest))
+# st.write(type(xtest[0]))
+
+# st.dataframe(temp)
+yy = np.array([1, 10, 1, 0, 30, 0, 0, 1])
+
+temp = logreg.predict([yy])
+
+st.write(temp)
