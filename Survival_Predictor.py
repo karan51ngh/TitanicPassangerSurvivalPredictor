@@ -42,10 +42,12 @@ with st.form("my_form"):
         ('Working Class: Manual Labor', 'Middle Class: Moderately decent living standard', 'Upper Class: The Top 1%'))
     Agee = st.slider(
         'How old are you?', 1, 90, 30)
-    Sibb = st.number_input('Number of Siblings/Spouces')
-    Parchh = st.number_input('Number of parents/children')
+    Sibb = st.slider(
+        'Number of Siblings/Spouces?', 0, 10, 2)
+    Parchh = st.slider(
+        'Number of Siblings/Spouces?', 0, 6, 2)
     faree = st.slider(
-        'how much would you be paying for your ticket, depending on your class?', 5, 500, 5)
+        'how much would you be paying for your ticket, depending on your class?', 5, 500, 7)
     sexx = st.selectbox(
         "What's your sex?",
         ('Male', 'Female'))
