@@ -43,9 +43,9 @@ with st.form("my_form"):
     Agee = st.slider(
         'How old are you?', 1, 90, 30)
     Sibb = st.slider(
-        'Number of Siblings/Spouces?', 0, 10, 2)
+        'Number of Siblings+Spouces?', 0, 10, 2)
     Parchh = st.slider(
-        'Number of Siblings/Spouces?', 0, 6, 2)
+        'Number of Parents+Children?', 0, 6, 2)
     faree = st.slider(
         'how much would you be paying for your ticket, depending on your class?', 5, 500, 7)
     sexx = st.selectbox(
