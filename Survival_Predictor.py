@@ -13,6 +13,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
+import multiprocessing as mp
 
 st.set_page_config(
     page_title="The Notebook",
@@ -79,31 +80,56 @@ with st.form("my_form"):
             x, y, test_size=0.30, random_state=0)
         xtrain = xtrain.to_numpy()
         xtest = xtest.to_numpy()
-        logreg = LogisticRegression()
-        svc_classifier = SVC()
-        dt_classifier = DecisionTreeClassifier()
-        knn_classifier = KNeighborsClassifier(5)
-        rf_classifier = RandomForestClassifier(
-            n_estimators=1000, criterion='entropy', random_state=42)
-        logreg.fit(xtrain, ytrain)
-        svc_classifier.fit(xtrain, ytrain)
-        dt_classifier.fit(xtrain, ytrain)
-        knn_classifier.fit(xtrain, ytrain)
-        rf_classifier.fit(xtrain, ytrain)
 
-        logreg_ypred = logreg.predict(xtest)
-        svc_classifier_ypred = svc_classifier.predict(xtest)
-        dt_classifier_ypred = dt_classifier.predict(xtest)
-        knn_classifier_ypred = knn_classifier.predict(xtest)
-        rf_classifier_ypred = rf_classifier.predict(xtest)
+### Liner Processing
 
-        logreg_acc = accuracy_score(ytest, logreg_ypred)
-        svc_classifier_acc = accuracy_score(ytest, svc_classifier_ypred)
-        dt_classifier_acc = accuracy_score(ytest, dt_classifier_ypred)
-        knn_classifier_acc = accuracy_score(ytest, knn_classifier_ypred)
-        rf_classifier_acc = accuracy_score(ytest, rf_classifier_ypred)
+        # logreg = LogisticRegression()
+        # svc_classifier = SVC()
+        # dt_classifier = DecisionTreeClassifier()
+        # knn_classifier = KNeighborsClassifier(5)
+        # rf_classifier = RandomForestClassifier(
+        #     n_estimators=1000, criterion='entropy', random_state=42)
+        # logreg.fit(xtrain, ytrain)
+        # svc_classifier.fit(xtrain, ytrain)
+        # dt_classifier.fit(xtrain, ytrain)
+        # knn_classifier.fit(xtrain, ytrain)
+        # rf_classifier.fit(xtrain, ytrain)
+### End of Linear Processing
+
+### Parallel Processing
+        
+
+        # def Initiate(models,data,queue):
+        #     for i in range(len(models)):
+        #         p = mp.Process(target=Parallel_training,args=(models[i],[xtrain,ytrain],i,queue))
+        #         p.start()
+        #         print("\nDone,",i,"\n")
+
+        # fit_val = mp.Queue()
+        # x = mp.Process(target=Initiate,args=(models,[xtrain,ytrain],fit_val))
+        # x.start()
+        # x.join()
+        # print("Successfully joined")
+
+
+            
+
+### End of Parellel Processing
+
+        # logreg_ypred = logreg.predict(xtest)
+        # svc_classifier_ypred = svc_classifier.predict(xtest)
+        # dt_classifier_ypred = dt_classifier.predict(xtest)
+        # knn_classifier_ypred = knn_classifier.predict(xtest)
+        # rf_classifier_ypred = rf_classifier.predict(xtest)
+
+        # logreg_acc = accuracy_score(ytest, logreg_ypred)
+        # svc_classifier_acc = accuracy_score(ytest, svc_classifier_ypred)
+        # dt_classifier_acc = accuracy_score(ytest, dt_classifier_ypred)
+        # knn_classifier_acc = accuracy_score(ytest, knn_classifier_ypred)
+        # rf_classifier_acc = accuracy_score(ytest, rf_classifier_ypred)
         # st.write(logreg_acc)
         # st.write(rf_classifier_acc)
+        
         if social_status == 'Working Class: Manual Labor':
             social_status = 3
         elif social_status == 'Middle Class: Moderately decent living standard':
@@ -132,13 +158,79 @@ with st.form("my_form"):
         yy = np.array([social_status, Agee, Sibb,
                       Parchh, faree, sexx, tempQ, tempS])
 
-        tempLR = logreg.predict([yy])
-        tempSV = svc_classifier.predict([yy])
-        tempDT = dt_classifier.predict([yy])
-        tempKN = knn_classifier.predict([yy])
-        tempRF = rf_classifier.predict([yy])
 
-        solarr = [tempLR, tempSV, tempDT, tempSV, tempKN, tempRF]
+
+        models=[]
+        logreg = LogisticRegression()
+        models.append(logreg)
+        svc_classifier = SVC()
+        models.append(svc_classifier)
+        dt_classifier = DecisionTreeClassifier()
+        models.append(dt_classifier)
+        knn_classifier = KNeighborsClassifier(5)
+        models.append(knn_classifier)
+        rf_classifier = RandomForestClassifier(
+            n_estimators=1000, criterion='entropy', random_state=42)
+        models.append(rf_classifier)
+ 
+        def Parallel_training(model,data,queue):
+            model.fit(data[0],data[1])
+            res = model.predict(data[2])
+            queue.put(res)
+
+        
+        queue = mp.Queue()
+        x1 = mp.Process(target=Parallel_training,args=(logreg,[xtrain,ytrain,[yy]],queue))
+        x2 = mp.Process(target=Parallel_training,args=(svc_classifier,[xtrain,ytrain,[yy]],queue))
+        x3 = mp.Process(target=Parallel_training,args=(dt_classifier,[xtrain,ytrain,[yy]],queue))
+        x4 = mp.Process(target=Parallel_training,args=(knn_classifier,[xtrain,ytrain,[yy]],queue))
+        x5 = mp.Process(target=Parallel_training,args=(rf_classifier,[xtrain,ytrain,[yy]],queue))
+        
+        x1.start()
+        x2.start()
+        x3.start()
+        x4.start()
+        x5.start()
+
+        x1.join()
+        x2.join()
+        x3.join()
+        x4.join()
+        x5.join()
+
+        # tempLR = logreg.predict([yy])
+        # tempSV = svc_classifier.predict([yy])
+        # tempDT = dt_classifier.predict([yy])
+        # tempKN = knn_classifier.predict([yy])
+        # tempRF = rf_classifier.predict([yy])
+
+        # def Parallel_testing(model,data,queue):
+        #     res = data.predict(data)
+        #     queue.put(res)
+
+        # def Initiate_pre(fit_val,data,queue):
+        #     while fit_val.qsize():
+        #         item = fit_val.get()
+        #         st.write(item)
+        #         p = mp.Process(target=Parallel_testing,args=(item[0],data,queue))
+        #         p.start()
+        # result = mp.Queue()
+        # x = mp.Process(target=Initiate_pre,args=(fit_val,[yy],result))
+        # x.start()
+        # x.join()
+        # solarr=[]
+        # print(result)
+        # while result.qsize():
+        #     print(result.get())
+            
+
+
+
+##End of Prallel Prediction
+        solarr=[]
+        while queue.qsize():
+            solarr.append(queue.get())
+        st.write(solarr)
         countt = 0
         for i in solarr:
             if i == 1:
